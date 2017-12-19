@@ -32,14 +32,14 @@ public class Game {
     }
 
     public void addClient(File client) {
-        player.loadPlayer(client);
-        points.add(0);
+        if (player.loadPlayer(client))
+            points.add(0);
     }
 
     private void resubmitTask() {
         if (calcControl != null) {
             calcControl.cancel(false);
-            calcControl = calcThread.scheduleWithFixedDelay(this::calcStep, 0, slowMode ? (long) (long) (1000000.0 / speed) : 1L, TimeUnit.MICROSECONDS);
+            calcControl = calcThread.scheduleWithFixedDelay(this::calcStep, calcControl.getDelay(TimeUnit.MICROSECONDS) > (long) (1000000.0 / speed) ? (long) (1000000.0 / speed) : calcControl.getDelay(TimeUnit.MICROSECONDS), slowMode ? (long) (1000000.0 / speed) : 1L, TimeUnit.MICROSECONDS);
         }
     }
 
@@ -84,6 +84,8 @@ public class Game {
         if (calcControl != null)
             calcControl.cancel(false);
         calcControl = null;
+        state.reset();
+        drawer.stop();
         points = new ArrayList<>();
         for (int i = 0; i < player.getUserCount(); i++) points.add(0);
         drawer.printGameState(state.getField());
@@ -110,14 +112,12 @@ public class Game {
         for (int i = 0; i < player.getUserCount(); i++) {
             names.add(player.getPlayer(i).getName());
         }
-        state.reset();
-        drawer.stop();
         stop();
         drawer.displayResult(scores, names);
     }
 
-    private boolean checkIfValidRequest(ChangeRequest request, Value Player) {
-        return request != null && request.getPlayer() == Player && request.getY() >= 0 && request.getX() >= 0 && request.getY() < state.getField().field[0].length && request.getX() < state.getField().field.length && state.getField().field[request.getX()][request.getY()] == NONE;
+    private boolean checkIfInvalidRequest(ChangeRequest request, Value Player) {
+        return request == null || request.getPlayer() != Player || request.getY() < 0 || request.getX() < 0 || request.getY() >= state.getField().field[0].length || request.getX() >= state.getField().field.length || state.getField().field[request.getX()][request.getY()] != NONE;
     }
 
     private void calcStep() {
@@ -143,14 +143,14 @@ public class Game {
         ChangeRequest change;
         if (firstPlayersTurn) {
             change = player.getPlayer(state.getPlayer1Index()).set(new GameFieldHandle(state.getField()));
-            if (!checkIfValidRequest(change, PLAYER1)) {
+            if (checkIfInvalidRequest(change, PLAYER1)) {
                 state.setWinsPlayer2(state.getWinsPlayer2() + 1);
                 swapPlayers();
                 return;
             }
         } else {
             change = player.getPlayer(state.getPlayer2Index()).set(new GameFieldHandle(state.getField()));
-            if (!checkIfValidRequest(change, PLAYER2)) {
+            if (checkIfInvalidRequest(change, PLAYER2)) {
                 state.setWinsPlayer1(state.getWinsPlayer1() + 1);
                 swapPlayers();
                 return;

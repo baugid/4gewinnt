@@ -47,7 +47,7 @@ public class ClickableMenu extends Menu {
     }
 
     /**
-     * This method should be used instead of {@link #setText() setText()} method.
+     * This method should be used instead of {@link #setText(String) setText()} method.
      *
      * @param text new title of this menu
      */

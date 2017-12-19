@@ -83,7 +83,6 @@ public class Main extends Application implements Drawer, SpeedObject {
         stop.setOnAction(evt -> {
             if (g.isRunning()) {
                 g.stop();
-                startButton.setTitle("Start");
             }
         });
 
