@@ -1,10 +1,7 @@
 import utils.User;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 
 public class Players {
@@ -18,29 +15,21 @@ public class Players {
         return playerObjects.get(index);
     }
 
-    public void loadPlayer(File file) {
-        ClassLoader cl;
+    public boolean loadPlayer(File file) {
         try {
-            cl = new URLClassLoader(new URL[]{file.getParentFile().toURI().toURL()});
-        } catch (MalformedURLException e) {
-            return;
-        }
-        Class<?> user;
-        String fileName = file.toPath().getFileName().toString();
-        int pos = fileName.lastIndexOf(".");
-        if (pos == -1) return;
-        try {
+            SecureClassLoader cl = new SecureClassLoader(new URL[]{file.getParentFile().toURI().toURL()});
+            Class<?> user;
+            String fileName = file.toPath().getFileName().toString();
+            int pos = fileName.lastIndexOf(".");
+            if (pos == -1) return false;
             user = cl.loadClass(fileName.substring(0, pos));
-        } catch (ClassNotFoundException e) {
-            return;
+            if (!User.class.isAssignableFrom(user))
+                return false;
+            playerObjects.add(new UserWrapper((User) user.getConstructor().newInstance()));
+        } catch (Exception e) {
+            return false;
         }
-        if (!User.class.isAssignableFrom(user))
-            return;
-        try {
-            playerObjects.add((User) user.getConstructor().newInstance());
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            return;
-        }
+        return true;
     }
 
     public int getUserCount() {
