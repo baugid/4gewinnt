@@ -49,4 +49,19 @@ public class GameFieldHandle {
     public int getHeight() {
         return f.field[0].length;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GameFieldHandle that = (GameFieldHandle) o;
+
+        return f.equals(that.f);
+    }
+
+    @Override
+    public int hashCode() {
+        return f.hashCode();
+    }
 }

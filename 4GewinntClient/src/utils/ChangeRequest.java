@@ -51,4 +51,22 @@ public class ChangeRequest {
     public Value getPlayer() {
         return player;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ChangeRequest that = (ChangeRequest) o;
+
+        return x == that.x && y == that.y && player == that.player;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = x;
+        result = 31 * result + y;
+        result = 31 * result + player.hashCode();
+        return result;
+    }
 }

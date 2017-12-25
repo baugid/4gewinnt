@@ -36,7 +36,7 @@ hs_err_pid*
 .idea/**/dynamic.xml
 # Gradle:
 .idea/**/gradle.xml
-/4GewinntPrivateAIs
+/4GewinntPrivateAIs/*
 # CMake
 cmake-build-debug/
 cmake-build-release/
