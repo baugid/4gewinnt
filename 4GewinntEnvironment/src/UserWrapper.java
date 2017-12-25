@@ -19,7 +19,7 @@ public class UserWrapper implements User {
         error = false;
         try {
             delegate.init(player);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             error = true;
             e.printStackTrace();
         }
@@ -30,7 +30,7 @@ public class UserWrapper implements User {
         if (!error)
             try {
                 return delegate.set(field);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
                 return new ChangeRequest(-1, -1, GameField.Value.NONE);
             }
@@ -42,7 +42,7 @@ public class UserWrapper implements User {
     public String getName() {
         try {
             return delegate.getName();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             return "User" + ownNumber;
         }
