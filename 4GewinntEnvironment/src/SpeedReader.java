@@ -6,12 +6,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.text.DecimalFormat;
+import java.util.Locale;
 
 public class SpeedReader {
     private SpeedObject reader;
     private Stage s;
     private Scene scene;
+    private Double turnVal = -1D;
 
     public SpeedReader(SpeedObject obj) {
         reader = obj;
@@ -20,16 +21,21 @@ public class SpeedReader {
         Label txt = new Label(" move(s)/s");
         Slider slider = new Slider(0.1, 10, 1);
         slider.autosize();
+        //TODO Improve scaling
         slider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.doubleValue() == slider.maxProperty().doubleValue())
-                slider.maxProperty().setValue(slider.maxProperty().doubleValue() + 1);
-            if (newValue.doubleValue() < slider.maxProperty().doubleValue() / 2.0 && slider.maxProperty().intValue() > 10)
-                slider.maxProperty().setValue(slider.maxProperty().doubleValue() - 1);
+            if (newValue.doubleValue() > oldValue.doubleValue()) {
+                turnVal = -1D;
+                slider.maxProperty().setValue(slider.maxProperty().doubleValue() + 0.2);
+            }
+            if (newValue.doubleValue() < oldValue.doubleValue() && slider.maxProperty().intValue() > 10) {
+                if (turnVal == -1D) turnVal = oldValue.doubleValue();
+                slider.maxProperty().setValue(slider.maxProperty().doubleValue() - ((oldValue.doubleValue() - newValue.doubleValue()) / ((turnVal - slider.minProperty().doubleValue()))) * (slider.maxProperty().doubleValue() - 10.0));
+            }
             if (newValue.doubleValue() == slider.minProperty().doubleValue())
                 slider.maxProperty().setValue(10.0);
-            val.setText(new DecimalFormat("#.##").format(newValue.doubleValue()));
             reader.setSpeed(newValue.doubleValue());
         });
+        val.textProperty().bind(slider.valueProperty().asString(Locale.getDefault(), "%.2f"));
         slider.setShowTickLabels(true);
         slider.setShowTickMarks(true);
         HBox controls = new HBox(val, txt);

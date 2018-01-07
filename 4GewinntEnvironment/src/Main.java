@@ -16,6 +16,7 @@ import utils.GameField;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Main extends Application implements Drawer, SpeedObject {
 
@@ -117,11 +118,13 @@ public class Main extends Application implements Drawer, SpeedObject {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Enter AI-File!");
         chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Java Classes", "*.class"));
-        File f;
+        List<File> f;
         do {
-            f = chooser.showOpenDialog(w);
+            f = chooser.showOpenMultipleDialog(w);
             if (f != null) {
-                g.addClient(f);
+                for (File file : f) {
+                    g.addClient(file);
+                }
             } else
                 return;
         } while (true);

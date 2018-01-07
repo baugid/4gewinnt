@@ -1,5 +1,7 @@
 package utils;
 
+import java.io.Serializable;
+
 import static utils.GameField.Value;
 
 /**
@@ -7,7 +9,7 @@ import static utils.GameField.Value;
  *
  * @author Gideon
  */
-public class ChangeRequest {
+public class ChangeRequest implements Serializable {
     private final int x;
     private final int y;
     private final Value player;

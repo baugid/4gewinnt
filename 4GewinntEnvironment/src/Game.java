@@ -82,13 +82,15 @@ public class Game {
 
     private void reset() {
         if (calcControl != null)
-            calcControl.cancel(false);
+            calcControl.cancel(true);
         calcControl = null;
         state.reset();
         drawer.stop();
         points = new ArrayList<>();
         for (int i = 0; i < player.getUserCount(); i++) points.add(0);
         drawer.printGameState(state.getField());
+        if (player.getUserCount() > 2)
+            drawer.displayText(player.getPlayer(state.getPlayer1Index()).getName() + " vs. " + player.getPlayer(state.getPlayer2Index()).getName() + " " + state.getWinsPlayer1() + ":" + state.getWinsPlayer2());
     }
 
     public void toggleMode() {

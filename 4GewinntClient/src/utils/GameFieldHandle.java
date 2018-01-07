@@ -1,12 +1,14 @@
 package utils;
 
+import java.io.Serializable;
+
 /**
  * Verwalter eines GameFields.
  * Diese Klasse soll verwendet werden.
  *
  * @author Gideon
  */
-public class GameFieldHandle {
+public class GameFieldHandle implements Serializable {
     /**
      * Das Feld selber.
      */

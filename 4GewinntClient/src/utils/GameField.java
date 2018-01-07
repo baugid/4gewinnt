@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Arrays;
  *
  * @author Gideon
  */
-public class GameField {
+public class GameField implements Serializable {
     /**
      * Das Feld selber.
      */
