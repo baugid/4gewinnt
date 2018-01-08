@@ -12,7 +12,6 @@ public class SpeedReader {
     private SpeedObject reader;
     private Stage s;
     private Scene scene;
-    private Double turnVal = -1D;
 
     public SpeedReader(SpeedObject obj) {
         reader = obj;
@@ -21,15 +20,12 @@ public class SpeedReader {
         Label txt = new Label(" move(s)/s");
         Slider slider = new Slider(0.1, 10, 1);
         slider.autosize();
-        //TODO Improve scaling
         slider.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.doubleValue() > oldValue.doubleValue()) {
-                turnVal = -1D;
-                slider.maxProperty().setValue(slider.maxProperty().doubleValue() + 0.2);
+                slider.maxProperty().setValue(slider.maxProperty().doubleValue() + newValue.doubleValue() - oldValue.doubleValue());
             }
-            if (newValue.doubleValue() < oldValue.doubleValue() && slider.maxProperty().intValue() > 10) {
-                if (turnVal == -1D) turnVal = oldValue.doubleValue();
-                slider.maxProperty().setValue(slider.maxProperty().doubleValue() - ((oldValue.doubleValue() - newValue.doubleValue()) / ((turnVal - slider.minProperty().doubleValue()))) * (slider.maxProperty().doubleValue() - 10.0));
+            if (newValue.doubleValue() < oldValue.doubleValue() && slider.maxProperty().doubleValue() > 10.0) {
+                slider.maxProperty().setValue(slider.maxProperty().doubleValue() - ((oldValue.doubleValue() - newValue.doubleValue()) / ((oldValue.doubleValue() - slider.minProperty().doubleValue()))) * (slider.maxProperty().doubleValue() - 10.0));
             }
             if (newValue.doubleValue() == slider.minProperty().doubleValue())
                 slider.maxProperty().setValue(10.0);
