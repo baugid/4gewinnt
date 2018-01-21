@@ -1,24 +1,26 @@
+package gui;
+
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
 /**
- * ClickableMenu by gist.github.com/Warlander
+ * gui.ClickableMenu by gist.github.com/Warlander
  **/
 public class ClickableMenu extends Menu {
 
     private final Label label;
 
     /**
-     * Creates new ClickableMenu without title.
+     * Creates new gui.ClickableMenu without title.
      */
     public ClickableMenu() {
         this("");
     }
 
     /**
-     * Creates new ClickableMenu with given title.
+     * Creates new gui.ClickableMenu with given title.
      *
      * @param title initial title
      */

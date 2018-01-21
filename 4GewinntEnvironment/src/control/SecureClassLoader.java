@@ -1,3 +1,5 @@
+package control;
+
 import utils.User;
 
 import java.io.DataInputStream;
@@ -32,7 +34,7 @@ public class SecureClassLoader extends URLClassLoader {
                 e.printStackTrace();
             }
             for (Integer index : classes) {
-                if (strings.get(index).matches("\\[?java/lang/reflect/.+"))
+                if (strings.get(index).matches("\\[*java/lang/reflect/.+"))
                     return null;
             }
         }

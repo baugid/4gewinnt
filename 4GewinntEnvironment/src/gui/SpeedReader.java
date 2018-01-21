@@ -1,3 +1,5 @@
+package gui;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -11,9 +13,8 @@ import java.util.Locale;
 public class SpeedReader {
     private SpeedObject reader;
     private Stage s;
-    private Scene scene;
 
-    public SpeedReader(SpeedObject obj) {
+    SpeedReader(SpeedObject obj) {
         reader = obj;
         s = new Stage();
         Label val = new Label("1");
@@ -39,7 +40,7 @@ public class SpeedReader {
         VBox layout = new VBox(slider, controls);
         layout.setAlignment(Pos.CENTER);
         layout.autosize();
-        scene = new Scene(layout, 200, 100);
+        Scene scene = new Scene(layout, 200, 100);
         s.setTitle("Set Speed");
         s.setResizable(true);
         s.setScene(scene);

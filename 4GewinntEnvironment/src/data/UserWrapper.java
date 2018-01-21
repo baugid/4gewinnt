@@ -1,3 +1,5 @@
+package data;
+
 import utils.ChangeRequest;
 import utils.GameField;
 import utils.GameFieldHandle;
@@ -9,7 +11,7 @@ public class UserWrapper implements User {
     private int ownNumber;
     private boolean error = false;
 
-    public UserWrapper(User delegate) {
+    UserWrapper(User delegate) {
         this.delegate = delegate;
         ownNumber = userCount++;
     }

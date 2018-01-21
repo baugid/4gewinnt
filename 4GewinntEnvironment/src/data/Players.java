@@ -1,8 +1,12 @@
+package data;
+
+import control.SecureClassLoader;
 import utils.User;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Players {
     private ArrayList<User> playerObjects;
@@ -15,11 +19,11 @@ public class Players {
         return playerObjects.get(index);
     }
 
-    public boolean loadPlayer(File file) {
+    public boolean addPlayer(File f) {
         try {
-            SecureClassLoader cl = new SecureClassLoader(new URL[]{file.getParentFile().toURI().toURL()});
+            SecureClassLoader cl = new SecureClassLoader(new URL[]{f.getParentFile().toURI().toURL()});
             Class<?> user;
-            String fileName = file.toPath().getFileName().toString();
+            String fileName = f.toPath().getFileName().toString();
             int pos = fileName.lastIndexOf(".");
             if (pos == -1) return false;
             user = cl.loadClass(fileName.substring(0, pos));
@@ -32,7 +36,7 @@ public class Players {
         return true;
     }
 
-    public int getUserCount() {
-        return playerObjects.size();
+    public List<User> listPlayers() {
+        return playerObjects;
     }
 }
