@@ -4,12 +4,16 @@ import utils.GameField;
 
 import static utils.GameField.Value.*;
 
-class WinChecker {
-    private ControlState controlState;
+class WinChecker extends ControlElement {
     private GameField field;
 
-    WinChecker(ControlState state) {
-        controlState = state;
+    private static WinChecker instance = new WinChecker();
+
+    private WinChecker() {
+    }
+
+    public static WinChecker getInstance() {
+        return instance;
     }
 
     public void declareWinner() {
@@ -17,40 +21,36 @@ class WinChecker {
         if (winner == null) return;
         switch (winner) {
             case NONE:
-                controlState.points.set(controlState.players.getPlayer1Index(), controlState.points.get(controlState.players.getPlayer1Index()) + 1);
-                controlState.points.set(controlState.players.getPlayer2Index(), controlState.points.get(controlState.players.getPlayer2Index()) + 1);
-                controlState.d.printGameState(controlState.state.getField());
-                controlState.players.swapPlayers();
+                getPoints().set(players.getPlayer1Index(), getPoints().get(players.getPlayer1Index()) + 1);
+                getPoints().set(players.getPlayer2Index(), getPoints().get(players.getPlayer2Index()) + 1);
                 break;
             case PLAYER1:
-                controlState.points.set(controlState.players.getPlayer1Index(), controlState.points.get(controlState.players.getPlayer1Index()) + 3);
-                controlState.d.printGameState(controlState.state.getField());
-                controlState.players.swapPlayers();
+                getPoints().set(players.getPlayer1Index(), getPoints().get(players.getPlayer1Index()) + 3);
                 break;
             case PLAYER2:
-                controlState.points.set(controlState.players.getPlayer2Index(), controlState.points.get(controlState.players.getPlayer2Index()) + 3);
-                controlState.d.printGameState(controlState.state.getField());
-                controlState.players.swapPlayers();
+                getPoints().set(players.getPlayer2Index(), getPoints().get(players.getPlayer2Index()) + 3);
                 break;
         }
+        swapPlayers();
+        updateField();
     }
 
     private GameField.Value checkWinner() {
-        field = controlState.state.getField();
-        for (int x = 0; x <= field.field.length - controlState.state.getAmountInRow(); x++) {
-            for (int y = 0; y <= field.field[x].length - controlState.state.getAmountInRow(); y++) {
+        field = state.getField();
+        for (int x = 0; x <= field.field.length - state.getAmountInRow(); x++) {
+            for (int y = 0; y <= field.field[x].length - state.getAmountInRow(); y++) {
                 switch (checkSubField(x, y)) {
                     case PLAYER1:
-                        controlState.state.setWinsPlayer1(controlState.state.getWinsPlayer1() + 1);
+                        state.setWinsPlayer1(state.getWinsPlayer1() + 1);
                         return PLAYER1;
                     case PLAYER2:
-                        controlState.state.setWinsPlayer2(controlState.state.getWinsPlayer2() + 1);
+                        state.setWinsPlayer2(state.getWinsPlayer2() + 1);
                         return PLAYER2;
                 }
             }
         }
         if (isFull()) {
-            controlState.state.setDraws(controlState.state.getDraws() + 1);
+            state.setDraws(state.getDraws() + 1);
             return NONE;
         }
         return null;
@@ -59,7 +59,7 @@ class WinChecker {
     private GameField.Value checkColumn(int x, int y) {
         GameField.Value base = field.field[x][y];
         if (base == NONE) return NONE;
-        for (int i = y + 1; i < y + controlState.state.getAmountInRow(); i++) {
+        for (int i = y + 1; i < y + state.getAmountInRow(); i++) {
             if (field.field[x][i] != base)
                 return NONE;
         }
@@ -69,7 +69,7 @@ class WinChecker {
     private GameField.Value checkRow(int x, int y) {
         GameField.Value base = field.field[x][y];
         if (base == NONE) return NONE;
-        for (int i = x + 1; i < x + controlState.state.getAmountInRow(); i++) {
+        for (int i = x + 1; i < x + state.getAmountInRow(); i++) {
             if (field.field[i][y] != base)
                 return NONE;
         }
@@ -79,7 +79,7 @@ class WinChecker {
     private GameField.Value checkFallingDiagonal(int x, int y) {
         GameField.Value base = field.field[x][y];
         if (base == NONE) return NONE;
-        for (int i = x + 1; i < x + controlState.state.getAmountInRow(); i++) {
+        for (int i = x + 1; i < x + state.getAmountInRow(); i++) {
             if (field.field[i][i] != base)
                 return NONE;
         }
@@ -87,10 +87,10 @@ class WinChecker {
     }
 
     private GameField.Value checkRisingDiagonal(int x, int y) {
-        GameField.Value base = field.field[x][y + (controlState.state.getAmountInRow() - 1)];
+        GameField.Value base = field.field[x][y + (state.getAmountInRow() - 1)];
         if (base == NONE) return NONE;
-        for (int i = x + 1; i < x + controlState.state.getAmountInRow(); i++) {
-            if (field.field[i][y + (controlState.state.getAmountInRow() - 1) - i + x] != base)
+        for (int i = x + 1; i < x + state.getAmountInRow(); i++) {
+            if (field.field[i][y + (state.getAmountInRow() - 1) - i + x] != base)
                 return NONE;
         }
         return base;
@@ -98,7 +98,7 @@ class WinChecker {
 
     private GameField.Value checkSubField(int x, int y) {
         //All Columns
-        for (int i = x; i < x + controlState.state.getAmountInRow(); i++) {
+        for (int i = x; i < x + state.getAmountInRow(); i++) {
             switch (checkColumn(i, y)) {
                 case PLAYER1:
                     return PLAYER1;
@@ -107,7 +107,7 @@ class WinChecker {
             }
         }
         //All Rows
-        for (int i = y; i < y + controlState.state.getAmountInRow(); i++) {
+        for (int i = y; i < y + state.getAmountInRow(); i++) {
             switch (checkRow(x, i)) {
                 case PLAYER1:
                     return PLAYER1;

@@ -6,7 +6,6 @@ public class GameState {
     private static final int amountInRow = 4;
     private int winsPlayer1 = 0;
     private int winsPlayer2 = 0;
-
     private int draws = 0;
     private GameField field;
 

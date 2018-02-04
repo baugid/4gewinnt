@@ -10,7 +10,7 @@ public class GameArea extends Canvas {
         GraphicsContext ct = getGraphicsContext2D();
         ct.clearRect(0, 0, getWidth(), getHeight());
         double fieldWidth = getWidth() / field.field[0].length;
-        double fieldHeight = (getHeight() /*- barHeight*/) / field.field.length;
+        double fieldHeight = getHeight() / field.field.length;
         double posX = 0;
         double posY = 0;
         ct.setStroke(Color.BLACK);

@@ -1,7 +1,7 @@
 package gui;
 
+import control.PlayerHandler;
 import control.Stoppable;
-import data.PlayerHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,7 +24,7 @@ public class PlayerView {
         remove.setAlignment(Pos.CENTER);
         remove.autosize();
         remove.setOnAction(evt -> {
-            callback.reset();
+            callback.stop();
             players.getSelectionModel().getSelectedIndices().forEach(index -> {
                 source.removePlayer(index);
                 players.getItems().remove(index.intValue());

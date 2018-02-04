@@ -93,10 +93,6 @@ public class Main extends Application implements Drawer, SpeedObject, MenuBarHan
         Platform.runLater(() -> menu.getStart().setTitle("Start"));
     }
 
-    @Override
-    public void reset() {
-        g.reset();
-    }
 
     @Override
     public void displayResult(ArrayList<Integer> scoreList, ArrayList<String> nameList) {

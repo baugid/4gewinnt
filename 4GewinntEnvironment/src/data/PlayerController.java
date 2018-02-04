@@ -1,22 +1,24 @@
-package control;
+package data;
 
-import data.PlayerHandler;
-import data.Players;
+import control.PlayerHandler;
 import utils.GameField;
 import utils.User;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-class PlayerController implements PlayerHandler {
+public class PlayerController implements PlayerHandler {
     private Players p;
-    private ControlState controlState;
+    private GameState state;
     private int player1Index = 0;
     private int player2Index = 1;
+    private ArrayList<Integer> points;
 
-    PlayerController(ControlState controlState) {
-        this.controlState = controlState;
+    public PlayerController(GameState state) {
+        this.state = state;
         p = new Players();
+        points = new ArrayList<>();
     }
 
     @Override
@@ -33,7 +35,7 @@ class PlayerController implements PlayerHandler {
     @Override
     public boolean removePlayer(int index) {
         if (index < 0 || index >= p.listPlayers().size()) return false;
-        controlState.points.remove(index);
+        points.remove(index);
         p.listPlayers().remove(index);
         return true;
     }
@@ -62,16 +64,15 @@ class PlayerController implements PlayerHandler {
     }
 
     public void swapPlayers() {
-        int help = controlState.state.getWinsPlayer1();
-        controlState.state.setWinsPlayer1(controlState.state.getWinsPlayer2());
-        controlState.state.setWinsPlayer2(help);
+        int help = state.getWinsPlayer1();
+        state.setWinsPlayer1(state.getWinsPlayer2());
+        state.setWinsPlayer2(help);
         help = player1Index;
         player1Index = player2Index;
         player2Index = help;
-        controlState.state.resetField();
+        state.resetField();
         getPlayer1().init(GameField.Value.PLAYER1);
         getPlayer2().init(GameField.Value.PLAYER2);
-        controlState.d.displayText(controlState.players.getPlayer1().getName() + " vs. " + controlState.players.getPlayer2().getName() + " " + controlState.state.getWinsPlayer1() + ":" + controlState.state.getWinsPlayer2());
     }
 
     public int getPlayer1Index() {
@@ -80,5 +81,9 @@ class PlayerController implements PlayerHandler {
 
     public int getPlayer2Index() {
         return player2Index;
+    }
+
+    public ArrayList<Integer> getPoints() {
+        return points;
     }
 }
